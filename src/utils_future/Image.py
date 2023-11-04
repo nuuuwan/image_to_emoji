@@ -1,8 +1,12 @@
-from functools import cached_property
+from functools import cache, cached_property
 
 from PIL import Image as PImage
+from sklearn.cluster import KMeans
+from utils import Log
 
 DEFAULT_MODE = 'HSV'
+log = Log('Image')
+MIN_SAT = 0.2 * 256
 
 
 class Image:
@@ -42,3 +46,17 @@ class Image:
     @cached_property
     def height(self):
         return self.size[1]
+
+    @cached_property
+    def pixels(self) -> list[tuple]:
+        pixels = []
+        for i in range(self.width):
+            for j in range(self.height):
+                pixels.append(self.im.getpixel((i, j)))
+        return pixels
+
+    @cache
+    def cluster_pixels(self, n_clusters: int):
+        kmeans = KMeans(n_clusters=n_clusters, random_state=0)
+        kmeans.fit(self.pixels)
+        return list(kmeans.labels_)

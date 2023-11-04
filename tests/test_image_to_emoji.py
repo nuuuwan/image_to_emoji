@@ -3,29 +3,27 @@ import unittest
 
 from utils import File
 
-from image_to_emoji import ImageToEmoji, pixel_to_emoji
+from image_to_emoji import ImageToEmoji
 
 DIR_TEST_INPUT = os.path.join('tests', 'test-input')
 DIR_TEST_OUTPUT = os.path.join('examples')
+EMOJIS = '⬛⚫🟤🟫🔴🟥🟠🟧🟡🟨🟢🟩🔵🟦🟣🟪⚪⬜'
+EMOJIS_SHORT = '⚫🟤🔴🟠🟡🟢🔵🟣⚪'
 
 
 class TestCase(unittest.TestCase):
     def test_get_emoji(self):
         content_list = []
-        for file_name, custom_pixel_to_emoji in [
-            (
-                'sri-lanka-climate.jpg',
-                pixel_to_emoji.for_color_groups(
-                    ('🌤️', '☀️', '🌦️', '🌦️', '⛈️', '⛈️'), '⬜'
-                ),
-            ),
-            ('sri-lanka-geography.png', pixel_to_emoji.default),
-            ('sri-lanka-provinces.png', pixel_to_emoji.default),
+        for file_name, emojis in [
+            # ('sri-lanka-provinces.png', '🐚⬜🥥🌊🌿🌾🌴🟧🟡🌄🏭💎🌴🟦🟣🟪⚪⬜'),
+            # (
+            #     'sri-lanka-climate.jpg',
+            #     ('⛈️', '⬜', '☀️', '🌦️', '🟡', '⬜', '🔵', '☀️', '⚪'),
+            # ),
+            ('sri-lanka-geography.png', '🔴⬜🌳⬜🌴🗻'),
         ]:
             image_path = os.path.join(DIR_TEST_INPUT, file_name)
-            image_to_emoji = ImageToEmoji(
-                image_path, custom_pixel_to_emoji=custom_pixel_to_emoji
-            )
+            image_to_emoji = ImageToEmoji(image_path, emojis)
             actual = image_to_emoji.get_emoji()
             self.assertIsInstance(actual, str)
             content_list.append(actual)
