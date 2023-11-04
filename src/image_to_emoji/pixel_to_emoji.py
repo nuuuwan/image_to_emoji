@@ -17,5 +17,5 @@ def for_color_groups(emojis, emoji_no_color) -> str:
 
 
 def default(pixel_hsv) -> str:
-    f = for_color_groups('🟤🔴🟠🟡🟢🔵🟣⚫', '⚪')
+    f = for_color_groups('🟤🟫🍫🔴🟥🩸🟠🟧🍊🟡🟨⭐🟢🟩🍏🔵🟦🥶🟣🟪🫐⬛⚫🎩', '⚪')
     return f(pixel_hsv)
