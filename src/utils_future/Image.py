@@ -2,13 +2,17 @@ from functools import cached_property
 
 from PIL import Image as PImage
 
-DEFAULT_MODE = 'RGBA'
+DEFAULT_MODE = 'HSV'
 
 
 class Image:
     @staticmethod
-    def id(i, j) -> str:
-        return f'{i},{j}'
+    def id(t: tuple) -> str:
+        return str(t)
+
+    @staticmethod
+    def pixel_id(pixel: tuple) -> str:
+        return Image.id(pixel)
 
     def __init__(self, im: PImage):
         self.im = im

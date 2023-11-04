@@ -31,6 +31,14 @@ class ImageToEmoji:
         )
 
     @cached_property
+    def emoji_width(self):
+        return int(self.image.width / self.k)
+
+    @cached_property
+    def emoji_height(self):
+        return int(self.image.height / self.k)
+
+    @cached_property
     def k(self) -> float:
         return max(self.image.width, self.image.height) / self.max_dim
 
@@ -41,8 +49,10 @@ class ImageToEmoji:
             ei = int(i / self.k)
             for j in range(self.image.height):
                 ej = int(j / self.k)
-                id = Image.id(ei, ej)
+                id = Image.id([ei, ej])
                 pixel = self.image.im.getpixel((i, j))
+                if i == 0 and j == 0:
+                    log.debug(f'pixel={pixel}')
                 emoji = self.pixel_to_emoji(pixel)
                 if id not in id_to_emoji_to_n:
                     id_to_emoji_to_n[id] = {}
@@ -51,20 +61,12 @@ class ImageToEmoji:
                 id_to_emoji_to_n[id][emoji] += 1
         return id_to_emoji_to_n
 
-    @cached_property
-    def emoji_width(self):
-        return int(self.image.width / self.k)
-
-    @cached_property
-    def emoji_height(self):
-        return int(self.image.height / self.k)
-
     def get_emoji_inner_lines(self) -> list[str]:
         lines = []
         for ej in range(self.emoji_height):
             line = []
             for ei in range(self.emoji_width):
-                id = Image.id(ei, ej)
+                id = Image.id([ei, ej])
                 emoji_to_n = self.id_to_emoji_to_n[id]
                 sorted_emoji_to_n = sorted(
                     emoji_to_n.items(), key=lambda x: x[1], reverse=True
