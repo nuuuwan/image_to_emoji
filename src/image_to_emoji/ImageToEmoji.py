@@ -75,10 +75,10 @@ class ImageToEmoji:
         return lines
 
     def get_emoji(self) -> str:
-        lines = []
+        lines = ['']
         lines.append(self.hashtag)
         lines.extend(self.get_emoji_inner_lines())
-        lines.append('#ImageToEmoji')
+        lines.append('')
         return '\n'.join(lines)
 
     def write(self, output_path: str) -> None:
