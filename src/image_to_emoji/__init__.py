@@ -1,0 +1,1 @@
+from image_to_emoji.ImageToEmoji import ImageToEmoji
