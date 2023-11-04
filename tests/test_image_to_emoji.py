@@ -15,12 +15,14 @@ class TestCase(unittest.TestCase):
     def test_get_emoji(self):
         content_list = []
         for file_name, emojis in [
-            # ('sri-lanka-provinces.png', '🐚⬜🥥🌊🌿🌾🌴🟧🟡🌄🏭💎🌴🟦🟣🟪⚪⬜'),
-            # (
-            #     'sri-lanka-climate.jpg',
-            #     ('⛈️', '⬜', '☀️', '🌦️', '🟡', '⬜', '🔵', '☀️', '⚪'),
-            # ),
+            ('sri-lanka-provinces.png', '🐚⬜🥥🌊🌿🌾🌴🟧🟡🌄🏭💎🌴🟦🟣🟪⚪⬜'),
+            (
+                'sri-lanka-climate.jpg',
+                ('⛈️', '⬜', '☀️', '🌦️', '🟡', '⬜', '🔵', '☀️', '⚪'),
+            ),
             ('sri-lanka-geography.png', '🔴⬜🌳⬜🌴🗻'),
+            ('sri-lanka-pres-poll-2019.png', '🔴⬜🟢🟢🔵🟣'),
+            ('sri-lanka-pres-poll-2015.png', '⬜🔴🔵🟢🔵🟣'),
         ]:
             image_path = os.path.join(DIR_TEST_INPUT, file_name)
             image_to_emoji = ImageToEmoji(image_path, emojis)
