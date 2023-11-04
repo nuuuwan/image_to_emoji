@@ -7,26 +7,27 @@ from image_to_emoji import ImageToEmoji
 
 DIR_TEST_INPUT = os.path.join('tests', 'test-input')
 DIR_TEST_OUTPUT = os.path.join('examples')
-EMOJIS = '⬛⚫🟤🟫🔴🟥🟠🟧🟡🟨🟢🟩🔵🟦🟣🟪⚪⬜'
-EMOJIS_SHORT = '⚫🟤🔴🟠🟡🟢🔵🟣⚪'
+# ⬛⚫🟤🟫🔴🟥🟠🟧🟡🟨🟢🟩🔵🟦🟣🟪⚪⬜
+# ⚫🟤🔴🟠🟡🟢🔵🟣⚪
 
 
 class TestCase(unittest.TestCase):
     def test_get_emoji(self):
         content_list = []
-        for file_name, emojis in [
-            ('sri-lanka-provinces.png', '🐚⬜🥥🌊🌿🌾🌴🟧🟡🌄🏭💎🌴🟦🟣🟪⚪⬜'),
+        for file_name, emojis, max_dim in [
+            ('sri-lanka-provinces.png', '🐚⬜🥥🌊🌿🌾🌴🟧🟡🌄🏭💎🌴🟦🟣🟪⚪⬜', None),
             (
                 'sri-lanka-climate.jpg',
                 ('⛈️', '⬜', '☀️', '🌦️', '🟡', '⬜', '🔵', '☀️', '⚪'),
+                None,
             ),
-            ('sri-lanka-geography.png', '🔴⬜🌳⬜🌴🗻'),
-            ('sri-lanka-pres-poll-2019.png', '🔴⬜🟢🟢🔵🟣'),
-            ('sri-lanka-pres-poll-2015.png', '⬜🔴🔵🟢🔵🟣'),
-            ('nuuuwan.png', '⚫🔴🟤🔴⚪🔴⚫⬛⚪'),
+            ('sri-lanka-geography.png', '🔴⬜🌳⬜🌴🗻', None),
+            ('sri-lanka-pres-poll-2019.png', '🔴⬜🟢🟢🔵🟣', None),
+            ('sri-lanka-pres-poll-2015.png', '⬜🔴🔵🟢🔵🟣', None),
+            ('nuuuwan.png', '⚫🔴🟤🔴⚪🔴⚫⬛⚪', 15),
         ]:
             image_path = os.path.join(DIR_TEST_INPUT, file_name)
-            image_to_emoji = ImageToEmoji(image_path, emojis)
+            image_to_emoji = ImageToEmoji(image_path, emojis, max_dim)
             actual = image_to_emoji.get_emoji()
             self.assertIsInstance(actual, str)
             content_list.append(actual)

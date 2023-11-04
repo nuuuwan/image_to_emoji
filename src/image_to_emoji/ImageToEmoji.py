@@ -15,10 +15,10 @@ class ImageToEmoji:
         self,
         image_path: str,
         emojis,
-        max_dim: int = DEFAULT_MAX_DIM,
+        max_dim: int = None,
     ):
         self.image_path = image_path
-        self.max_dim = max_dim
+        self.max_dim = max_dim or DEFAULT_MAX_DIM
         self.emojis = emojis
         self.image = Image.load(self.image_path)
 
