@@ -13,7 +13,6 @@ DIR_TEST_OUTPUT = os.path.join('examples')
 
 class TestCase(unittest.TestCase):
     def test_get_emoji(self):
-        content_list = []
         for file_name, emojis, max_dim in [
             ('sri-lanka-provinces.png', '🐚⬜🥥🌊🌿🌾🌴🟧🟡🌄🏭💎🌴🟦🟣🟪⚪⬜', None),
             (
@@ -30,12 +29,8 @@ class TestCase(unittest.TestCase):
             image_to_emoji = ImageToEmoji(image_path, emojis, max_dim)
             actual = image_to_emoji.get_emoji()
             self.assertIsInstance(actual, str)
-            content_list.append(actual)
-
+        
             emoji_path = os.path.join(
                 DIR_TEST_OUTPUT, file_name + '.emoji.txt'
             )
             image_to_emoji.write(emoji_path)
-
-        lines = ['# Image To Emoji'] + content_list
-        File('README.txt').write_lines(lines)
