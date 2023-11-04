@@ -6,7 +6,6 @@ from utils import Log
 
 DEFAULT_MODE = 'HSV'
 log = Log('Image')
-MIN_SAT = 0.2 * 256
 
 
 class Image:
@@ -55,8 +54,13 @@ class Image:
                 pixels.append(self.im.getpixel((i, j)))
         return pixels
 
+    @cached_property
+    def hues(self) -> list[float]:
+        return list(map(lambda x: [x[0]], self.pixels))
+
     @cache
     def cluster_pixels(self, n_clusters: int):
+        log.debug(f'{n_clusters=}')
         kmeans = KMeans(n_clusters=n_clusters, random_state=0, n_init='auto')
         kmeans.fit(self.pixels)
 
@@ -76,4 +80,11 @@ class Image:
             )
         )
         labels = list(map(lambda x: old_i_to_new_i[x], labels))
+        i_to_n = {}
+        for label in labels:
+            if label not in i_to_n:
+                i_to_n[label] = 0
+            i_to_n[label] += 1
+        log.debug(f'{i_to_n=}')
+
         return labels

@@ -7,7 +7,8 @@ from utils_future import Image
 
 log = Log('ImageToEmoji')
 
-DEFAULT_MAX_DIM = 28
+DEFAULT_MAX_DIM = 20
+MIN_SAT = 0.2 * 256
 
 
 class ImageToEmoji:
@@ -43,24 +44,36 @@ class ImageToEmoji:
 
     @cached_property
     def id_to_ci_to_n(self) -> dict:
-        n_clusters = len(self.emojis)
+        n_clusters = len(self.emojis) - 1
         ci_list = self.image.cluster_pixels(n_clusters)
         id_to_ci_to_n = {}
+        ci_to_n = {}
         for i in range(self.image.width):
             ei = int(i / self.k)
             for j in range(self.image.height):
                 ej = int(j / self.k)
                 id = Image.id([ei, ej])
-                ci = ci_list[i * self.image.height + j]
+
+                pixel = self.image.im.getpixel((i, j))
+                s = pixel[1]
+                if s < MIN_SAT:
+                    ci = 0
+                else:
+                    ci = ci_list[i * self.image.height + j] + 1
                 if id not in id_to_ci_to_n:
                     id_to_ci_to_n[id] = {}
                 if ci not in id_to_ci_to_n[id]:
                     id_to_ci_to_n[id][ci] = 0
                 id_to_ci_to_n[id][ci] += 1
+                if ci not in ci_to_n:
+                    ci_to_n[ci] = 0
+                ci_to_n[ci] += 1
+        log.info(f'ci_to_n: {ci_to_n}')
         return id_to_ci_to_n
 
     def get_emoji_inner_lines(self) -> list[str]:
         lines = []
+        max_ci_to_n = {}
         for ej in range(self.emoji_height):
             line = []
             for ei in range(self.emoji_width):
@@ -70,8 +83,12 @@ class ImageToEmoji:
                     ci_to_n.items(), key=lambda x: x[1], reverse=True
                 )
                 max_ci = sorted_ci_to_n[0][0]
+                if max_ci not in max_ci_to_n:
+                    max_ci_to_n[max_ci] = 0
+                max_ci_to_n[max_ci] += 1
                 line.append(self.emojis[max_ci])
             lines.append(''.join(line))
+        log.info(f'{max_ci_to_n=}')
         return lines
 
     def get_emoji(self) -> str:
