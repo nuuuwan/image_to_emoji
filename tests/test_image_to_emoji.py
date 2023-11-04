@@ -36,4 +36,4 @@ class TestCase(unittest.TestCase):
             image_to_emoji.write(emoji_path)
 
         lines = ['# Image To Emoji'] + content_list
-        File('README.md').write_lines(lines)
+        File('README.txt').write_lines(lines)
