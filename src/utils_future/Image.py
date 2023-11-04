@@ -57,6 +57,23 @@ class Image:
 
     @cache
     def cluster_pixels(self, n_clusters: int):
-        kmeans = KMeans(n_clusters=n_clusters, random_state=0)
+        kmeans = KMeans(n_clusters=n_clusters, random_state=0, n_init='auto')
         kmeans.fit(self.pixels)
-        return list(kmeans.labels_)
+
+        labels = kmeans.labels_
+        cluster_centers = kmeans.cluster_centers_
+
+        i_and_cluster_centers = list(enumerate(cluster_centers))
+        sorted_i_and_cluster_centers = sorted(
+            i_and_cluster_centers, key=lambda x: x[1][0]
+        )
+        old_i_to_new_i = dict(
+            list(
+                map(
+                    lambda x: (x[1][0], x[0]),
+                    enumerate(sorted_i_and_cluster_centers),
+                )
+            )
+        )
+        labels = list(map(lambda x: old_i_to_new_i[x], labels))
+        return labels
