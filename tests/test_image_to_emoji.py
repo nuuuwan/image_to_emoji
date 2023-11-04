@@ -23,6 +23,7 @@ class TestCase(unittest.TestCase):
             ('sri-lanka-geography.png', '🔴⬜🌳⬜🌴🗻'),
             ('sri-lanka-pres-poll-2019.png', '🔴⬜🟢🟢🔵🟣'),
             ('sri-lanka-pres-poll-2015.png', '⬜🔴🔵🟢🔵🟣'),
+            ('nuuuwan.png', '⚫🔴🟤🔴⚪🔴⚫⬛⚪'),
         ]:
             image_path = os.path.join(DIR_TEST_INPUT, file_name)
             image_to_emoji = ImageToEmoji(image_path, emojis)
